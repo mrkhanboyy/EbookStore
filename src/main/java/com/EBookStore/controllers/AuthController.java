@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.EBookStore.dto.AuthenticationResponse;
-import com.EBookStore.dto.LoginrReqeuest;
+import com.EBookStore.dto.LoginReqeuest;
 import com.EBookStore.dto.RegisterReqeuest;
 import com.EBookStore.service.AuthService;
 
@@ -35,7 +35,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/authenticate")
-	public AuthenticationResponse login(@RequestBody LoginrReqeuest req) {
+	public AuthenticationResponse login(@RequestBody LoginReqeuest req) {
 		 return authService.login(req);
 		
 	}

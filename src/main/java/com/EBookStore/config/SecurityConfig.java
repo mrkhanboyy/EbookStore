@@ -53,7 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					     				 "/api/book/genre/**")
 						 					.hasAnyAuthority("BASIC","VIP","PREMIUM")
 			.antMatchers(HttpMethod.POST, "/api/book/add")
-					     					.hasAnyAuthority("ADMIN")				
+					     					.hasAnyAuthority("ADMIN")	
+			.antMatchers("/api/comment/**")
+					     					.hasAnyAuthority("BASIC","VIP","PREMIUM")	
+		    .antMatchers("/api/plan/**")
+		     								.hasAnyAuthority("BASIC", "VIP")
 			.anyRequest()
 			.authenticated();
 		

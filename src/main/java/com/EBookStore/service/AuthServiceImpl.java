@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.EBookStore.dto.AuthenticationResponse;
-import com.EBookStore.dto.LoginrReqeuest;
+import com.EBookStore.dto.LoginReqeuest;
 import com.EBookStore.dto.RegisterReqeuest;
 import com.EBookStore.exceptions.TokenNotFoundException;
 import com.EBookStore.exceptions.UserNotFoundException;
@@ -79,8 +79,8 @@ public class AuthServiceImpl implements AuthService{
 		"http://localhost:9090/api/auth/verify/"+token);
 		mailService.sendMail(mail);
 	}
+	
 	// generating verification token
-	@Transactional
 	private String generateVerificationToken(User user) {
 		String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
@@ -108,7 +108,7 @@ public class AuthServiceImpl implements AuthService{
 	}
 
 	@Transactional
-	public AuthenticationResponse login(LoginrReqeuest req) {
+	public AuthenticationResponse login(LoginReqeuest req) {
 		String username = req.getUsername();
 		String password = req.getPassword();
 		

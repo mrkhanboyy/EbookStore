@@ -32,9 +32,8 @@ public class User {
 	@NotBlank(message = "username is required")
 	private String username;
 	
-	@Email
+	@Email(message = "please provide a valid email")
 	@Column(unique = true)
-	@NotBlank(message = "email is required")
 	private String email;
 	
 	@NotBlank(message = "password is required")

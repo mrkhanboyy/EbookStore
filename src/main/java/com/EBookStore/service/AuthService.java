@@ -1,7 +1,7 @@
 package com.EBookStore.service;
 
 import com.EBookStore.dto.AuthenticationResponse;
-import com.EBookStore.dto.LoginrReqeuest;
+import com.EBookStore.dto.LoginReqeuest;
 import com.EBookStore.dto.RegisterReqeuest;
 
 public interface AuthService {
@@ -10,5 +10,5 @@ public interface AuthService {
 	
 	public void verifyAccount(String token);
 	
-	public AuthenticationResponse login(LoginrReqeuest req);
+	public AuthenticationResponse login(LoginReqeuest req);
 }

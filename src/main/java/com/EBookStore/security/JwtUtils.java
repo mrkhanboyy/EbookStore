@@ -33,12 +33,10 @@ public class JwtUtils {
 	}
 	
 	public String getUsernameFromToken(String jwtToken) {
-		Claims claims = Jwts.parser()
+				return Jwts.parser()
 						.setSigningKey(key)
 						.parseClaimsJws(jwtToken)
-						.getBody();
-		return claims.getSubject();
-		
+						.getBody().getSubject();
 	}
 
 }

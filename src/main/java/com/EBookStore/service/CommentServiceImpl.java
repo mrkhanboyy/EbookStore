@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.EBookStore.dto.CommentDto;
 import com.EBookStore.exceptions.BookNotFoundException;
 import com.EBookStore.exceptions.UserNotFoundException;
+import com.EBookStore.mapper.CommentMapper;
 import com.EBookStore.model.Book;
 import com.EBookStore.model.Comment;
 import com.EBookStore.repository.BookRepo;
@@ -24,6 +25,7 @@ public class CommentServiceImpl implements CommentService {
 	private final CommentRepo commentRepo;
 	private final BookRepo bookRepo;
 	private final UserRepo userRepo;
+	private final CommentMapper commentMapper;
 
 	@Override
 	public void save(CommentDto commentDto) {
@@ -43,16 +45,7 @@ public class CommentServiceImpl implements CommentService {
 				.orElseThrow(() -> new BookNotFoundException("Book not found with id  : "+id));
 		
 		return commentRepo.findByBook(book).stream()
-		.map((comment) -> {
-			CommentDto cd =  new CommentDto();
-			cd.setText(comment.getText());
-			cd.setUserName(comment.getUser().getUsername());
-			cd.setCreatedDate(comment.getCreatedDate());
-			return cd;
-		}).collect(Collectors.toList());
-				
-						
-			
+				.map(commentMapper::CommentToDto).collect(Collectors.toList());
 	}
 
 }
