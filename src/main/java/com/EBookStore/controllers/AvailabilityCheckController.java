@@ -27,6 +27,6 @@ public class AvailabilityCheckController {
 	@GetMapping("/username/{username}")
 	public ResponseEntity<String> checkUsernameAvailability(@PathVariable("username") String username) {
 		return new ResponseEntity<String> (
-				availabilityCheckService.checkEmailAvailability(username), HttpStatus.OK);
+				availabilityCheckService.checkUsernameAvailability(username), HttpStatus.OK);
 	}
 }

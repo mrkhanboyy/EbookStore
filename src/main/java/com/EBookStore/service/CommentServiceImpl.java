@@ -34,8 +34,7 @@ public class CommentServiceImpl implements CommentService {
 		comment.setCreatedDate(LocalDate.now());
 		comment.setBook(bookRepo.findById(commentDto.getBookId())
 				.orElseThrow(() -> new BookNotFoundException("Book not found with id  : "+commentDto.getBookId())));
-		comment.setUser(userRepo.findByUsername(commentDto.getUserName())
-				.orElseThrow(() ->  new UserNotFoundException("user not found with username : "+commentDto.getUserName())));
+		comment.setUsername(commentDto.getUsername());
 		commentRepo.save(comment);
 	}
 
@@ -43,7 +42,6 @@ public class CommentServiceImpl implements CommentService {
 	public List<CommentDto> getAllCommentsByBookId(Long id) {
 		Book book = bookRepo.findById(id)
 				.orElseThrow(() -> new BookNotFoundException("Book not found with id  : "+id));
-		
 		return commentRepo.findByBook(book).stream()
 				.map(commentMapper::CommentToDto).collect(Collectors.toList());
 	}

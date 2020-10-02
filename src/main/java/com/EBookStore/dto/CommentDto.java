@@ -15,5 +15,5 @@ public class CommentDto {
 	private String text;
     private Long bookId;
     private LocalDate createdDate;
-    private String userName;
+    private String username;
 }

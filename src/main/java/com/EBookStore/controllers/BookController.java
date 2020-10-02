@@ -44,4 +44,10 @@ public class BookController {
 		bookService.saveBook(bookDetails);
 		return new ResponseEntity<String>("Book added successfully", HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/delete/{id}")
+	public ResponseEntity<String> deleteBook(@PathVariable ("id") Long id) {
+		bookService.deleteBook(id);
+		return new ResponseEntity<String>("Book deleted successfully", HttpStatus.CREATED);
+	}
 }

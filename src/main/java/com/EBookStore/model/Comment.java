@@ -32,8 +32,6 @@ public class Comment {
     @JoinColumn(name = "book_id", referencedColumnName = "book_id")
     private Book book;
     private LocalDate createdDate;
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-    private User user;
+    private String username;
 }
 

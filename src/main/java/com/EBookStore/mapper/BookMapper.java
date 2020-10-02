@@ -10,6 +10,7 @@ public class BookMapper {
 
 	public BookDetails bookToDto(Book book) {
 		BookDetails bd = new BookDetails();
+		bd.setId(book.getId());
 		bd.setTitle(book.getTitle());
 		bd.setAuthor(book.getAuthor());
 		bd.setGenre(book.getGenre());

@@ -10,8 +10,9 @@ public class CommentMapper {
 
 	public CommentDto CommentToDto(Comment comment) {
 		CommentDto cd =  new CommentDto();
+		cd.setId(comment.getId());
 		cd.setText(comment.getText());
-		cd.setUserName(comment.getUser().getUsername());
+		cd.setUsername(comment.getUsername());
 		cd.setCreatedDate(comment.getCreatedDate());
 		return cd;
 	}

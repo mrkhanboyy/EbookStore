@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
-	@Autowired
-	private JWTAuthenticationFilter jwtAuthenticationFilter;
+	
+	
+	@Bean
+    public JWTAuthenticationFilter jwtAuthenticationFilter() {
+        return new JWTAuthenticationFilter();
+    }
 
 	
 	@Bean
@@ -44,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
 			.authorizeRequests()
 			.antMatchers("/api/auth/**",
 						 "/api/check/**")
@@ -52,18 +59,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 										"/api/book/id/**",
 					     				 "/api/book/genre/**")
 						 					.hasAnyAuthority("BASIC","VIP","PREMIUM")
-			.antMatchers(HttpMethod.POST, "/api/book/add")
+			.antMatchers("/api/book/add","/api/book/delete")
 					     					.hasAnyAuthority("ADMIN")	
 			.antMatchers("/api/comment/**")
 					     					.hasAnyAuthority("BASIC","VIP","PREMIUM")	
 		    .antMatchers("/api/plan/**")
 		     								.hasAnyAuthority("BASIC", "VIP")
 			.anyRequest()
-			.authenticated();
+			.authenticated();	
 		
-		http
-			.addFilterBefore(jwtAuthenticationFilter,
-					UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+		
 	}
 	
 	@Bean
