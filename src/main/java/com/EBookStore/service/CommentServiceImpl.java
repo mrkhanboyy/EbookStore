@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.EBookStore.dto.CommentDto;
 import com.EBookStore.exceptions.BookNotFoundException;
-import com.EBookStore.exceptions.UserNotFoundException;
 import com.EBookStore.mapper.CommentMapper;
 import com.EBookStore.model.Book;
 import com.EBookStore.model.Comment;
 import com.EBookStore.repository.BookRepo;
 import com.EBookStore.repository.CommentRepo;
-import com.EBookStore.repository.UserRepo;
 
 import lombok.AllArgsConstructor;
 
@@ -24,7 +22,6 @@ public class CommentServiceImpl implements CommentService {
 	
 	private final CommentRepo commentRepo;
 	private final BookRepo bookRepo;
-	private final UserRepo userRepo;
 	private final CommentMapper commentMapper;
 
 	@Override

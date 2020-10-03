@@ -3,7 +3,6 @@ package com.EBookStore.service;
 import java.util.List;
 
 import com.EBookStore.dto.BookDetails;
-import com.EBookStore.model.Book;
 
 public interface BookService {
 	

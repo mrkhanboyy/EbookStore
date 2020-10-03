@@ -57,20 +57,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						.permitAll()
 			.antMatchers(HttpMethod.GET, "/api/book/books",
 										"/api/book/id/**",
-					     				 "/api/book/genre/**")
-						 					.hasAnyAuthority("BASIC","VIP","PREMIUM")
-			.antMatchers("/api/book/add","/api/book/delete")
-					     					.hasAnyAuthority("ADMIN")	
-			.antMatchers("/api/comment/**")
-					     					.hasAnyAuthority("BASIC","VIP","PREMIUM")	
+					     				 "/api/book/genre/**",
+										"/api/user/me",
+										"/api/comment/**")
+						 				.hasAnyAuthority("BASIC","VIP","PREMIUM")
 		    .antMatchers("/api/plan/**")
-		     								.hasAnyAuthority("BASIC", "VIP")
+		     							.hasAnyAuthority("BASIC", "VIP")
+		     .antMatchers("/api/book/add","/api/book/delete")
+					     				.hasAnyAuthority("ADMIN")
 			.anyRequest()
 			.authenticated();	
 		
+		/*
+		 * jwt authentication filter for authorization 
+		 */
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-		
 	}
 	
 	@Bean

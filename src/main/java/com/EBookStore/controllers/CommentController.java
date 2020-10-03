@@ -24,9 +24,9 @@ public class CommentController {
 	private final CommentService commentService;
 
 	@PostMapping("/create")
-	public  ResponseEntity createComment(@RequestBody CommentDto commentDto) {
+	public  ResponseEntity<String> createComment(@RequestBody CommentDto commentDto) {
 		commentService.save(commentDto);
-		return new ResponseEntity(HttpStatus.CREATED);
+		return new ResponseEntity<String>(HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/get/{bookId}")
