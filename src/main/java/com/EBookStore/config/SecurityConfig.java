@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -52,19 +53,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
 			.authorizeRequests()
-			.antMatchers("/api/auth/**",
-						 "/api/check/**")
-						.permitAll()
+			
 			.antMatchers(HttpMethod.GET, "/api/book/books",
 										"/api/book/id/**",
 					     				 "/api/book/genre/**",
 										"/api/user/me",
-										"/api/comment/**")
+										"/api/comment/**",
+										"/api/user/me",
+										"/api/auth/logout")
 						 				.hasAnyAuthority("BASIC","VIP","PREMIUM")
 		    .antMatchers("/api/plan/**")
 		     							.hasAnyAuthority("BASIC", "VIP")
-		     .antMatchers("/api/book/add","/api/book/delete")
+		    .antMatchers("/api/book/add","/api/book/delete")
 					     				.hasAnyAuthority("ADMIN")
+			.antMatchers("/api/auth/**",
+					   	"/api/check/**")
+					   						.permitAll()
 			.anyRequest()
 			.authenticated();	
 		
@@ -74,6 +78,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
+	
+	 @Override
+	    public void configure(WebSecurity web) {
+	        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
+	                "/swagger-ui.html", "/webjars/**");
+	    }
 	
 	@Bean
 	@Override

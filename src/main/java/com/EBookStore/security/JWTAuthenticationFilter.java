@@ -24,6 +24,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	@Autowired
 	private  UserDetailsService userDetailsService;
 	
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
 									HttpServletResponse response,
@@ -42,7 +43,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	                SecurityContextHolder.getContext().setAuthentication(
 	                        authentication);
 	            }
-	            
 	        }
 		 
 		
@@ -51,13 +51,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	}
 
 	/**
-	 * @return token without "Bearer" part
+	 * @return token without "Bearer"
 	 */
 	private String getJWTFromRequest(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 		if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
 			return bearerToken.substring(7);
-			
 		}
 		return bearerToken;
 	}

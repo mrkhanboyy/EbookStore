@@ -1,8 +1,6 @@
 package com.EBookStore.security;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,20 +15,25 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtUtils {
 	
+	@Value("${secret.key}")
+	private String key;
 	
-	private String key = "THISISSECRETKEYNUMBER1THISISSECRETKEYNUMBER1THISISSECRETKEYNUMBER1THISISSECRETKEYNUMBER1THISISSECRETKEYNUMBER1THISISSECRETKEYNUMBER1";
 	
-	@Value("18000") //in seconds (5 hours)
-    private Long expiration;
+    private Long expiration = 900l;
 	
 	
 	public String generateToken(User user) {
-		Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", user.getUsername());
-        claims.put("created", new Date(System.currentTimeMillis()));
-        return Jwts.builder().setClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-                .signWith(Keys.hmacShaKeyFor(key.getBytes()) ).compact();
+        return Jwts.builder().setSubject(user.getUsername())
+				  .setIssuedAt(new Date(System.currentTimeMillis()))
+	                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+	                .signWith(Keys.hmacShaKeyFor(key.getBytes()) ).compact();
+	}
+	
+	public String generateTokenWithUsername(String username){
+		  return Jwts.builder().setSubject(username)
+				  .setIssuedAt(new Date(System.currentTimeMillis()))
+	                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+	                .signWith(Keys.hmacShaKeyFor(key.getBytes()) ).compact();
 	}
 	
 	public boolean validateToken(String jwtToken, UserDetails userDetails) {
@@ -39,6 +42,8 @@ public class JwtUtils {
 	        return username.equals(userDetails.getUsername())
 	                && !isTokenExpired(jwtToken);
 	}
+	
+	
 	
 	private boolean isTokenExpired(String jwtToken) {
 		 Date expiration = null;
@@ -50,6 +55,10 @@ public class JwtUtils {
         return expiration.before(new Date(System.currentTimeMillis()));
 	}
 
+	/**
+	 * @param jwtToken
+	 * @return expiration date and time of token 
+	 */
 	private Date getExpirationDateFromToken(String jwtToken) {
 		 Date expiration;
 	        try {
@@ -76,14 +85,12 @@ public class JwtUtils {
 	public String getUsernameFromToken(String jwtToken) {
 		String username;
         try {
-        	
             Claims claims = getClaimsFromToken(jwtToken.replace("Bearer ", ""));
             username = claims.getSubject();
         } catch (Exception e) {
             username = null;
         }
         return username;
-				
 	}
 
 }

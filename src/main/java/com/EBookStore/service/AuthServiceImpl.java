@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.EBookStore.dto.AuthenticationResponse;
+import com.EBookStore.dto.JwtSessionTokenRequest;
 import com.EBookStore.dto.LoginReqeuest;
 import com.EBookStore.dto.RegisterReqeuest;
 import com.EBookStore.exceptions.TokenNotFoundException;
@@ -25,6 +27,7 @@ import com.EBookStore.model.VerificationToken;
 import com.EBookStore.repository.UserRepo;
 import com.EBookStore.repository.VerificationTokenRepository;
 import com.EBookStore.security.JwtUtils;
+import com.EBookStore.security.SessionTokenUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -37,7 +40,8 @@ public class AuthServiceImpl implements AuthService{
 	private final MailService mailService;
 	private final VerificationTokenRepository verificationTokenRepository;
 	private final AuthenticationManager authenticationManager;
-	private final JwtUtils jwtGenerator;
+	private final JwtUtils jwtUtils;
+	private final SessionTokenUtil sessionTokenUtil;
 
 	//registering user and adding to database
 	@Transactional
@@ -119,8 +123,17 @@ public class AuthServiceImpl implements AuthService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new UserNotFoundException("user not found with username : "+username));
 		
-		String token = jwtGenerator.generateToken(user);
-		return new AuthenticationResponse(username, token);
+		String token = jwtUtils.generateToken(user);
+		String sessioToken = sessionTokenUtil.generateSessionToken().getToken();
+		return new AuthenticationResponse(username, token, sessioToken);
 	}
+
 	
+	@Override
+	public AuthenticationResponse sessionToken( JwtSessionTokenRequest jwtSessionTokenRequest) {
+		sessionTokenUtil.validateSessionToken(jwtSessionTokenRequest.getSessionToken());
+		String token = jwtUtils.generateTokenWithUsername(jwtSessionTokenRequest.getUsername());
+		return  new AuthenticationResponse(jwtSessionTokenRequest.getSessionToken(),
+								token, jwtSessionTokenRequest.getSessionToken());
+	}
 }

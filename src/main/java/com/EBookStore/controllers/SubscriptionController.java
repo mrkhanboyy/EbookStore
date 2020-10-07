@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.EBookStore.dto.SubscriptionDto;
 import com.EBookStore.service.SubscriptionService;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -18,6 +19,10 @@ public class SubscriptionController {
 	
 	private final SubscriptionService subscriptionService;
 
+	/**
+	 * Upgrades a user's plan
+	 */
+	@ApiOperation(value = "Upgrades a user's plan")
 	@PutMapping("/upgrade")
 	public HttpStatus upgrade(@RequestBody SubscriptionDto subDto) {
 		subscriptionService.upgradePlan(subDto);

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.EBookStore.dto.CommentDto;
 import com.EBookStore.service.CommentService;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -23,12 +24,20 @@ public class CommentController {
 	
 	private final CommentService commentService;
 
+	/**
+	 * creates a new comment.
+	 */
+	@ApiOperation(value = "creates a new comment.")
 	@PostMapping("/create")
 	public  ResponseEntity<String> createComment(@RequestBody CommentDto commentDto) {
 		commentService.save(commentDto);
 		return new ResponseEntity<String>(HttpStatus.CREATED);
 	}
 	
+	/**
+	 * return list of all comments associated with a book.
+	 */
+	@ApiOperation(value = "return list of all comments associated with a book.")
 	@GetMapping("/get/{bookId}")
 	public List<CommentDto> getCommentsByBookId(@PathVariable("bookId") Long id){
 		return commentService.getAllCommentsByBookId(id);
